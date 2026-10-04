@@ -11,16 +11,22 @@
 <body>
   <header class="topbar">
     <a class="wordmark" href="#top" aria-label="Treas OS home"><span class="mark">T</span> treas</a>
+    <nav class="tabs" aria-label="Main navigation">
+      <a href="#overview">Overview</a>
+      <a href="#features">Features</a>
+      <a href="#architecture">Architecture</a>
+      <a href="#start">Get started</a>
+    </nav>
     <a class="source-link" href="https://github.com/uriyovsiannikov/treas" target="_blank" rel="noreferrer">Source <span aria-hidden="true">↗</span></a>
   </header>
   <main id="top">
-    <section class="hero">
+    <section class="hero" id="overview">
       <div class="hero-copy">
         <p class="eyebrow"><span class="status-dot"></span> x86_64 · NT-inspired · open source</p>
         <h1>A small OS.<br><span>Running native code.</span></h1>
         <p class="intro">Treas runs one native application inside a fresh virtual machine, then returns its output straight to your terminal.</p>
         <div class="actions">
-          <a class="button primary" href="https://github.com/uriyovsiannikov/treas">Explore the project <span>↗</span></a>
+          <a class="button primary" href="https://github.com/uriyovsiannikov/treas" target="_blank" rel="noreferrer">Explore the project <span>↗</span></a>
           <a class="button secondary" href="#start">Run it locally <span>↓</span></a>
         </div>
       </div>
@@ -29,17 +35,25 @@
         <pre><code><span class="muted">$</span> make all
 <span class="muted">$</span> Build/treas -b Build/fetch.texb
 
-<span class="accent">    \\__  o</span>     Treas OS 0.1
+<span class="accent">    \\__  o</span>      Treas OS 0.1
 <span class="accent">|\/    o\  o</span>    Kernel:     Treas64
 <span class="accent">&gt;       &lt; o</span>     CPU:        x86_64
 <span class="accent">|/\   __/</span>       Runtime:    QEMU
 <span class="accent">    //</span></code></pre>
       </div>
     </section>
-    <section class="features" aria-label="Project features">
+    <section class="features" id="features" aria-label="Project features">
       <article><span class="feature-icon">01</span><h2>Native, isolated</h2><p>Run a guest application in its own virtual machine. KVM when available, TCG otherwise.</p></article>
       <article><span class="feature-icon">02</span><h2>Small by design</h2><p>A compact kernel, a versioned syscall ABI, and shared-memory I/O.</p></article>
       <article><span class="feature-icon">03</span><h2>Built to explore</h2><p>Processes, threads, virtual memory, events, and a freestanding C SDK.</p></article>
+    </section>
+    <section class="architecture" id="architecture">
+      <div class="section-heading"><p class="eyebrow">UNDER THE HOOD</p><h2>A focused system, layer by layer.</h2></div>
+      <div class="architecture-grid">
+        <article><span class="feature-icon">01 / HOST</span><h3>One command</h3><p>The host launcher starts QEMU, passes the app image, and returns its output and exit code.</p></article>
+        <article><span class="feature-icon">02 / KERNEL</span><h3>Small executive</h3><p>Processes, threads, virtual memory, handles, and an 11-call native ABI.</p></article>
+        <article><span class="feature-icon">03 / CHANNEL</span><h3>Shared memory</h3><p>Streams and preopened host files use an `ivshmem` channel.</p></article>
+      </div>
     </section>
     <section class="start" id="start">
       <div><p class="eyebrow">GET STARTED</p><h2>Try Treas on your machine.</h2><p>Build the project and launch the system information utility.</p></div>
@@ -50,5 +64,25 @@ Build/treas -b Build/fetch.texb</code></pre>
     </section>
   </main>
   <footer><span>© 2026 Treas OS</span><span>Made for x86_64 · <a href="https://github.com/uriyovsiannikov/treas/blob/main/LICENSE">MIT License</a></span></footer>
+  <script>
+    let highlightTimer;
+    document.addEventListener('click', (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+      const section = document.querySelector(link.getAttribute('href'));
+      if (!section || !section.matches('main, section')) return;
+
+      document.querySelectorAll('.section-flash').forEach((item) => {
+        item.classList.remove('section-flash');
+      });
+      window.clearTimeout(highlightTimer);
+      requestAnimationFrame(() => {
+        section.classList.add('section-flash');
+        highlightTimer = window.setTimeout(() => {
+          section.classList.remove('section-flash');
+        }, 1250);
+      });
+    });
+  </script>
 </body>
 </html>
